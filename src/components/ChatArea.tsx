@@ -61,6 +61,22 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
     });
   };
 
+  const handleSubmitFeedback = (messageId: number) => {
+    const feedbackData = {
+      type: feedbacks[messageId],
+      selectedOptions: selectedOptions[messageId] || [],
+      messageId
+    };
+
+    console.log('Feedback submitted:', feedbackData);
+
+    // Close the detail input after submission
+    closeDetailInput(messageId);
+
+    // Optionally show a success message or notification
+    // You can add toast notification here if needed
+  };
+
   const positiveOptions = ['Accurate', 'Clear', 'Helpful', 'Fast'];
   const negativeOptions = ['Inaccurate', 'Unclear', 'Not helpful', 'Too slow'];
 
@@ -244,7 +260,10 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
                                 >
                                   Skip
                                 </button>
-                                <button className="flex-1 sm:flex-none px-2.5 py-1.5 bg-indigo-600 text-white border border-indigo-600 text-[11px] md:text-xs rounded-lg hover:bg-indigo-700 hover:border-indigo-700 transition-all font-medium">
+                                <button
+                                  onClick={() => handleSubmitFeedback(message.id)}
+                                  className="flex-1 sm:flex-none px-2.5 py-1.5 bg-indigo-600 text-white border border-indigo-600 text-[11px] md:text-xs rounded-lg hover:bg-indigo-700 hover:border-indigo-700 transition-all font-medium"
+                                >
                                   Submit
                                 </button>
                               </div>
