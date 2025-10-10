@@ -4,19 +4,23 @@ import { FileEdit, X, Upload } from 'lucide-react';
 interface FeedbackModalProps {
   isOpen: boolean;
   onClose: () => void;
+  errorInfo?: {
+    title: string;
+    message: string;
+  };
 }
 
 type FeedbackType = 'bug' | 'feature' | 'other';
 
-export const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose }) => {
-  const [feedbackType, setFeedbackType] = useState<FeedbackType>('bug');
-  const [subject, setSubject] = useState('');
-  const [description, setDescription] = useState('');
+export const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose, errorInfo }) => {
+  const [feedbackType, setFeedbackType] = useState<FeedbackType>(errorInfo ? 'bug' : 'bug');
+  const [subject, setSubject] = useState(errorInfo ? errorInfo.title : '');
+  const [description, setDescription] = useState(errorInfo ? `Error: ${errorInfo.message}` : '');
   const [email, setEmail] = useState('');
   const [includeSession, setIncludeSession] = useState(true);
   const [screenshots, setScreenshots] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>(errorInfo ? ['Unexpected Behavior'] : []);
 
   const toggleTag = (tag: string) => {
     setSelectedTags(prev =>
@@ -86,7 +90,9 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose })
         <div className="bg-white px-4 md:px-6 py-3 md:py-4 flex items-center justify-between border-b border-zinc-200">
           <div className="flex items-center gap-2">
             <FileEdit className="w-3.5 h-3.5 md:w-4 md:h-4 text-zinc-700" />
-            <h2 className="text-sm md:text-base font-semibold text-zinc-800">Send Feedback</h2>
+            <h2 className="text-sm md:text-base font-semibold text-zinc-800">
+              {errorInfo ? 'Report Error' : 'Send Feedback'}
+            </h2>
           </div>
           <button
             onClick={onClose}
@@ -98,30 +104,41 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose })
 
         {/* Content */}
         <form onSubmit={handleSubmit} className="p-4 md:p-6 space-y-4 md:space-y-5 overflow-y-auto flex-1">
-          {/* Feedback Type Selection */}
-          <div>
-            <label className="block text-[11px] md:text-xs font-medium text-zinc-700 mb-2">Feedback Type</label>
-            <div className="flex gap-1.5 md:gap-2">
-              {[
-                { value: 'bug', label: '🐛 Bug Report', icon: '🐛' },
-                { value: 'feature', label: '✨ Feature Request', icon: '✨' },
-                { value: 'other', label: '💬 Other', icon: '💬' }
-              ].map((type) => (
-                <button
-                  key={type.value}
-                  type="button"
-                  onClick={() => handleFeedbackTypeChange(type.value as FeedbackType)}
-                  className={`flex-1 px-2 md:px-2.5 py-1.5 rounded-lg text-[10px] md:text-xs font-medium transition-all ${
-                    feedbackType === type.value
-                      ? 'bg-indigo-600 text-white border border-indigo-600'
-                      : 'bg-zinc-50 text-zinc-600 border border-zinc-200 hover:bg-zinc-100'
-                  }`}
-                >
-                  {type.label}
-                </button>
-              ))}
+          {/* Error Report Notice */}
+          {errorInfo && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-2.5 md:p-3">
+              <p className="text-[11px] md:text-xs text-red-800">
+                <span className="font-semibold">🐛 Error Report</span> - You're reporting an error that occurred in the application.
+              </p>
             </div>
-          </div>
+          )}
+
+          {/* Feedback Type Selection */}
+          {!errorInfo && (
+            <div>
+              <label className="block text-[11px] md:text-xs font-medium text-zinc-700 mb-2">Feedback Type</label>
+              <div className="flex gap-1.5 md:gap-2">
+                {[
+                  { value: 'bug', label: '🐛 Bug Report', icon: '🐛' },
+                  { value: 'feature', label: '✨ Feature Request', icon: '✨' },
+                  { value: 'other', label: '💬 Other', icon: '💬' }
+                ].map((type) => (
+                  <button
+                    key={type.value}
+                    type="button"
+                    onClick={() => handleFeedbackTypeChange(type.value as FeedbackType)}
+                    className={`flex-1 px-2 md:px-2.5 py-1.5 rounded-lg text-[10px] md:text-xs font-medium transition-all ${
+                      feedbackType === type.value
+                        ? 'bg-indigo-600 text-white border border-indigo-600'
+                        : 'bg-zinc-50 text-zinc-600 border border-zinc-200 hover:bg-zinc-100'
+                    }`}
+                  >
+                    {type.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Subject */}
           <div>

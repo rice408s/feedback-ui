@@ -130,6 +130,7 @@ function App() {
       <FeedbackModal
         isOpen={isFeedbackOpen}
         onClose={() => setIsFeedbackOpen(false)}
+        errorInfo={errorInfo || undefined}
       />
     </div>
   );
