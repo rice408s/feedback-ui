@@ -1,22 +1,18 @@
 import React from 'react';
-import { Share2, Folder, Menu, FileEdit, CheckCircle2, XCircle } from 'lucide-react';
+import { Share2, Folder, Menu, FileEdit } from 'lucide-react';
 
 interface TopBarProps {
   title?: string;
   className?: string;
   onMobileMenuClick?: () => void;
   onFeedbackClick?: () => void;
-  onTestSuccess?: () => void;
-  onTestFailure?: () => void;
 }
 
 export const TopBar: React.FC<TopBarProps> = ({
   title = 'Eros in cursus turpis massa',
   className = '',
   onMobileMenuClick,
-  onFeedbackClick,
-  onTestSuccess,
-  onTestFailure
+  onFeedbackClick
 }) => {
   return (
     <div className={`bg-white border-b border-zinc-100 px-4 py-2.5 flex items-center justify-between ${className}`}>

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { FileEdit, TestTube, CheckCircle2, XCircle } from 'lucide-react';
+import { useState } from 'react';
+import { FileEdit, CheckCircle2, XCircle } from 'lucide-react';
 import { Sidebar } from './components/Sidebar';
 import { TopBar } from './components/TopBar';
 import { ChatArea, type Message } from './components/ChatArea';
@@ -76,8 +76,6 @@ function App() {
         <TopBar
           onMobileMenuClick={() => setIsMobileSidebarOpen(true)}
           onFeedbackClick={() => setIsFeedbackOpen(true)}
-          onTestSuccess={handleTestSuccess}
-          onTestFailure={handleTestFailure}
         />
 
         {/* Chat Area */}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FileEdit, X, Upload, Trash2 } from 'lucide-react';
+import { FileEdit, X, Upload } from 'lucide-react';
 
 interface FeedbackModalProps {
   isOpen: boolean;
